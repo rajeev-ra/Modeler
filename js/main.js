@@ -2,14 +2,14 @@ define('THREE', ['js/lib/three.min'], function ( THREE ) { window.THREE = THREE;
 
 requirejs.config({
     baseUrl: '.',
-    paths: { "player" : "js/player/player",
+    paths: { "Player" : "js/player/Player",
             "Model" : "js/model/Model",
-            "Control": "js/player/control",
-            "Point": "js/model/point",
+            "Control": "js/player/Control",
+            "Point": "js/model/Point",
             "Config": "js/config"}
 });
 
-require(["THREE", "player", "Model", "Point", "Config"], function(THREE, player, Model, Point, Config){
+require(["THREE", "Player", "Model", "Point", "Config"], function(THREE, player, Model, Point, Config){
     window.Config = Config;
     window.Config.point.material = new THREE.MeshLambertMaterial({color: 0x7777ff});
     _Player = player;
