@@ -19,7 +19,7 @@ require(["THREE", "Player", "Model", "Point", "Config", "Notify"], function(THRE
 
     m = new Model();
     m.geometry.vertices.push(new Point(-1,-1,0));
-    m.geometry.vertices.push(new Point(0,2,0));
+    m.geometry.vertices.push(new Point(0,1.5,0));
     m.geometry.vertices.push(new Point(1,-1,0));
 
     m.geometry.faces.push( new THREE.Face3( 0, 2, 1 ) );

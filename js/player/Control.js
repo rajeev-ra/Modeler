@@ -136,7 +136,19 @@ define(function (require) {
                 mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
                 raycaster.setFromCamera( mouse, camera );
                 var intersects = raycaster.intersectObjects( _this.scene.children );
-                Notify.Event(Notify.CommonEvents.ItemSelected, intersects);
+                if(intersects.length){
+                    var dist = Number.MAX_VALUE;
+                    var sel = null;
+                    intersects.forEach(element => {
+                        if(dist > element.distance){
+                            dist = element.distance;
+                            sel = element;
+                        }
+                    });
+                    if(sel){
+                        Notify.Event(Notify.CommonEvents.ItemSelected, sel);
+                    }
+                }
             }
             else if(1 === event.button){
                 mouse_w_down = true;

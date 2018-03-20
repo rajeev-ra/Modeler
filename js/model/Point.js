@@ -22,8 +22,10 @@ define(function (require) {
             this.x = this.y = this.z = 0.0;
         }
 
-        this.mesh = new THREE.Mesh( new THREE.SphereGeometry( window.Config.point.size, 10, 10 ), window.Config.point.material );
+        this.mesh = new THREE.Mesh( new THREE.SphereGeometry( window.Config.point.size, 15, 15 ), window.Config.point.material );
         this.mesh.position.set(this.x, this.y, this.z);
+        this.mesh.geometry.computeFaceNormals();
+        this.mesh.pointParent = this;
     }
 
     Point.prototype = Object.create( THREE.Vector3.prototype );
