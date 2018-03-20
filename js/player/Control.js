@@ -1,6 +1,10 @@
 define(function (require) {
-    function Control(scene, camera) {
+    function Control(scene, camera, domElement) {
         var THREE = require('THREE');
+        var Notify = require("Notify");
+        var raycaster = new THREE.Raycaster();
+        var mouse = new THREE.Vector2();
+
         var PI_2 = Math.PI / 2;
         var TO_DEG = Math.PI / 180.0; 
         var mouse_l_down = false, mouse_w_down = false, mouse_r_down = false;
@@ -8,11 +12,9 @@ define(function (require) {
         var centre = new THREE.Vector3(0,0,0);
         var dist = 5;
         var x = 0, y = 0, xz, z = 1;
-        var rot_y = 0, rot_w = 0; 
+        var rot_y = 0, rot_w = 0;
+        this.scene = scene;
         
-        var raycaster = new THREE.Raycaster();
-        var mouse = new THREE.Vector2();
-
         this.Reset = function(){
             camera.up = new THREE.Vector3(0,1,0);
             centre = new THREE.Vector3(0,0,0);
@@ -35,9 +37,9 @@ define(function (require) {
 
         function GetBBox(){
             var bBox = new THREE.Box3();
-            for(var i = scene.children.length - 1; i > 0; i--){
-                if(scene.children[i].isModel){
-                    bBox.expandByObject(scene.children[i]);
+            for(var i = _this.scene.children.length - 1; i > 0; i--){
+                if(_this.scene.children[i].isModel){
+                    bBox.expandByObject(_this.scene.children[i]);
                 }
             }
             return bBox;
@@ -126,26 +128,33 @@ define(function (require) {
             }
         }
 
-        function onMouseDown(e) {
-            if(0 === e.button){
+        function onMouseDown(event) {
+            event.preventDefault();
+            if(0 === event.button){
                 mouse_l_down = true;
+                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+                raycaster.setFromCamera( mouse, camera );
+                var intersects = raycaster.intersectObjects( _this.scene.children );
+                Notify.Event(Notify.CommonEvents.ItemSelected, intersects);
             }
-            else if(1 === e.button){
+            else if(1 === event.button){
                 mouse_w_down = true;
             }
-            else if(2 === e.button){
+            else if(2 === event.button){
                 mouse_r_down = true;
             }
         }
 
-        function onMouseUp(e) {
-            if(0 === e.button){
+        function onMouseUp(event) {
+            event.preventDefault();
+            if(0 === event.button){
                 mouse_l_down = false;
             }
-            else if(1 === e.button){
+            else if(1 === event.button){
                 mouse_w_down = false;
             }
-            else if(2 === e.button){
+            else if(2 === event.button){
                 mouse_r_down = false;
             }
         }
@@ -164,9 +173,7 @@ define(function (require) {
         }
 
         function onMouseMove(event) {
-            mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-            mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-            if(mouse_l_down){
+            if(mouse_r_down){
                 var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
                 var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
                 rot_y += movementX * -0.5;
@@ -199,12 +206,14 @@ define(function (require) {
             }
         }
 
-        document.addEventListener('keydown', onKeyDown, false );
-        document.addEventListener('keyup', onKeyUp, false );
-        document.addEventListener('mousedown', onMouseDown, false );
-        document.addEventListener('mouseup', onMouseUp, false );
-        document.addEventListener('mousemove', onMouseMove, false );
-        document.addEventListener('mousewheel', onMouseWheel, false );
+        var _this = this;
+        domElement.addEventListener('keydown', onKeyDown, false );
+        domElement.addEventListener('keyup', onKeyUp, false );
+        domElement.addEventListener('mousedown', onMouseDown, false );
+        domElement.addEventListener('mouseup', onMouseUp, false );
+        domElement.addEventListener('mousemove', onMouseMove, false );
+        domElement.addEventListener('mousewheel', onMouseWheel, false );
+        domElement.addEventListener('contextmenu', function(evt) { evt.preventDefault(); }, false);
     }
 
     return Control;
