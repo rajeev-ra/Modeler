@@ -6,3 +6,12 @@ html, body, canvas{
     overflow: hidden;
     border: 0;
 }
+
+
+#cssmenu{
+    opacity: 0.3;
+}
+
+#cssmenu:hover{
+    opacity: 1;
+}

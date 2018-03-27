@@ -6,6 +6,36 @@ define(function(){
             _this.parent.onresize = function(){
                 _this.resize();
             };
+            
+            function DrawAxisPlanes(THREE){
+                var matX = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+                var matY = new THREE.LineBasicMaterial( { color: 0x00ff00 } );
+                var matZ = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+                var geomX = new THREE.Geometry();
+                var geomY = new THREE.Geometry();
+                var geomZ = new THREE.Geometry();
+                geomX.vertices.push(new THREE.Vector3( -10, 0, 0) );
+                geomX.vertices.push(new THREE.Vector3( 10, 0, 0) );
+                geomY.vertices.push(new THREE.Vector3( 0, -10, 0) );
+                geomY.vertices.push(new THREE.Vector3( 0, 10, 0) );
+                geomZ.vertices.push(new THREE.Vector3( 0, 0, -10) );
+                geomZ.vertices.push(new THREE.Vector3( 0, 0, 10) );
+                var lineX = new THREE.LineSegments(geomX, matX);
+                var lineY = new THREE.LineSegments(geomY, matY);
+                var lineZ = new THREE.LineSegments(geomZ, matZ);
+
+                var lineX1 = new THREE.LineSegments(geomX, matX);
+                var lineY1 = new THREE.LineSegments(geomY, matY);
+                var lineZ1 = new THREE.LineSegments(geomZ, matZ);
+                _this.scene_mesh.add(lineX);
+                _this.scene_mesh.add(lineY);
+                _this.scene_mesh.add(lineZ);
+                
+                _this.scene_wireframe.add(lineX1);
+                _this.scene_wireframe.add(lineY1);
+                _this.scene_wireframe.add(lineZ1);                
+            }
+
             require(["THREE", "Control", "Notify"], function(THREE, Control, Notify){
                 _this.scene_mesh = new THREE.Scene();
                 _this.scene_wireframe = new THREE.Scene();
@@ -16,12 +46,15 @@ define(function(){
                 _this.parent.appendChild( _this.renderer.domElement );
                 _this.renderer.setClearColor(new THREE.Color(window.Config.player.bgColor), 1);
 
-                var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
-                light.position.set( 0.5, 1, 0.75 );
-                _this.scene_mesh.add( light );
-                _this.scene_wireframe.add( light );
+                DrawAxisPlanes(THREE);
+                var light1 = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
+                light1.position.set( 0.5, 1, 0.75 );
+                _this.scene_mesh.add( light1 );
+                var light2 = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
+                light2.position.set( 0.5, 1, 0.75 );
+                _this.scene_wireframe.add( light2 );
 
-                _this.control = new Control(_this.scene, _this.camera, _this.renderer.domElement);
+                _this.control = new Control(_this.scene_wireframe, _this.camera, _this.renderer.domElement);
 
                 function animate() {
                     requestAnimationFrame( animate );
@@ -54,6 +87,9 @@ define(function(){
         },
 
         SetRenderMode: function(mode){
+            if(undefined === mode || null === mode){
+                mode = (this.scene === this.scene_mesh) ? "wireframe" : "mesh";
+            }
             switch(mode){
                 case 'mesh': this.scene = this.scene_mesh; break; 
                 case 'wireframe': this.scene = this.scene_wireframe; break; 
