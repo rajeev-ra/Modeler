@@ -1,11 +1,9 @@
-define(function (require) {
+define(["THREE", "Notify", "PlayerHelper"], function (THREE, Notify, PlayerHelper) {
     function Control(scene, camera, domElement) {
-        var THREE = require('THREE');
-        var Notify = require("Notify");
+
         var raycaster = new THREE.Raycaster();
         var selection = [];
-        var movePlane = new THREE.Mesh( new THREE.PlaneGeometry( 10, 10 ), new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide, transparent: true, opacity:0.3} ) );
-
+        
         var kb = {
             x: false, y: false, z: false, ctrl: false, alt: false, shift: false,
             up: false, down: false, left: false, right: false
@@ -140,10 +138,21 @@ define(function (require) {
         }
 
         function onKeyDown(e) {
+            if(!PlayerHelper.playerFocus){
+                return;
+            }
+
             setKeyState(e.keyCode, true);
+            if(87 < e.keyCode && 91 > e.keyCode){
+                PlayerHelper.setPlaneNormal(e.keyCode);
+            }
         }
 
         function onKeyUp(e) {
+            if(!PlayerHelper.playerFocus){
+                return;
+            }
+            
             setKeyState(e.keyCode, false);
         }
 
@@ -177,9 +186,9 @@ define(function (require) {
                 }
                 if(0 < selection.length){
                     Notify.Event(Notify.CommonEvents.ItemSelected, selection);
-                    movePlane.position.set( selection[0].pointParent.x, selection[0].pointParent.y, selection[0].pointParent.z );
-                    movePlane.lookAt(camera.position);
-                    scene.add(movePlane);
+                    var planeNor = new THREE.Vector3(x, y, z);
+                    planeNor.add(selection[0].pointParent);
+                    PlayerHelper.showPlane(scene, selection[0].pointParent, planeNor);
                 }
             }
             else if(1 === event.button){
@@ -195,7 +204,7 @@ define(function (require) {
             if(0 === event.button){
                 mouse.left = false;
                 selection.length = 0;
-                scene.remove(movePlane);
+                PlayerHelper.hidePlane(scene);
             }
             else if(1 === event.button){
                 mouse.wheel = false;
@@ -254,9 +263,9 @@ define(function (require) {
                 updateCamPos();
             }
             else if(mouse.left && 0 < selection.length){
-                movePlane.position.set( selection[0].pointParent.x, selection[0].pointParent.y, selection[0].pointParent.z );
-                movePlane.lookAt(camera.position);
-                var intersects = raycaster.intersectObjects( [movePlane] );
+                //movePlane.position.set( selection[0].pointParent.x, selection[0].pointParent.y, selection[0].pointParent.z );
+                //movePlane.lookAt(camera.position);
+                var intersects = raycaster.intersectObjects( [PlayerHelper.movePlane] );
                 if(0 < intersects.length){
                     selection[0].pointParent.X = intersects[0].point.x;
                     selection[0].pointParent.Y = intersects[0].point.y;
@@ -267,8 +276,8 @@ define(function (require) {
         }
 
         var _this = this;
-        domElement.addEventListener('keydown', onKeyDown, false );
-        domElement.addEventListener('keyup', onKeyUp, false );
+        document.addEventListener('keydown', onKeyDown, false );
+        document.addEventListener('keyup', onKeyUp, false );
         domElement.addEventListener('mousedown', onMouseDown, false );
         domElement.addEventListener('mouseup', onMouseUp, false );
         domElement.addEventListener('mousemove', onMouseMove, false );

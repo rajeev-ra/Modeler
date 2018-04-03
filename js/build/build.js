@@ -8,6 +8,7 @@
         Point: "js/model/Point",
         Config: "js/config",
         Notify: "js/player/Notify",
+        PlayerHelper: "js/player/PlayerHelper",
         THREE: "js/lib/three.min",
     },
     

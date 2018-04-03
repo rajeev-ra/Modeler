@@ -1,6 +1,4 @@
-define(function (require) {
-    var THREE = require("THREE");
-    var Point = require("Point");
+define(["THREE", "Point"], function (THREE, Point) {
 
     function Model(geometry, material){        
         THREE.Object3D.call( this );

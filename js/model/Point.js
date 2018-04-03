@@ -1,6 +1,5 @@
-define(function (require) {
-    var Line = require('js/model/Line');
-    var THREE = require("THREE");
+define(["THREE"], function (THREE) {
+    
     var sphereGeom = new THREE.SphereGeometry( 0.1, 15, 15 );
 
     function Point(x, y, z){
