@@ -144,7 +144,12 @@ define(["THREE", "Notify", "PlayerHelper"], function (THREE, Notify, PlayerHelpe
 
             setKeyState(e.keyCode, true);
             if(87 < e.keyCode && 91 > e.keyCode){
-                PlayerHelper.setPlaneNormal(e.keyCode);
+                if(kb.shift){
+                    PlayerHelper.setAxisParallel(e.keyCode, camera.position);
+                }
+                else{
+                    PlayerHelper.setPlaneNormal(e.keyCode);
+                }
             }
         }
 
@@ -267,9 +272,24 @@ define(["THREE", "Notify", "PlayerHelper"], function (THREE, Notify, PlayerHelpe
                 //movePlane.lookAt(camera.position);
                 var intersects = raycaster.intersectObjects( [PlayerHelper.movePlane] );
                 if(0 < intersects.length){
-                    selection[0].pointParent.X = intersects[0].point.x;
-                    selection[0].pointParent.Y = intersects[0].point.y;
-                    selection[0].pointParent.Z = intersects[0].point.z;
+                    if(PlayerHelper.moveAlongPlane){
+                        selection[0].pointParent.X = intersects[0].point.x;
+                        selection[0].pointParent.Y = intersects[0].point.y;
+                        selection[0].pointParent.Z = intersects[0].point.z;
+                    }
+                    else{
+                        switch(PlayerHelper.selectedAxis){
+                            case 88: //x
+                                selection[0].pointParent.X = intersects[0].point.x;
+                                break;
+                            case 89: //y
+                                selection[0].pointParent.Y = intersects[0].point.y;
+                                break;
+                            case 90: //z
+                                selection[0].pointParent.Z = intersects[0].point.z;
+                                break;
+                        }
+                    }
                     //console.log(intersects[0]);
                 }
             }
