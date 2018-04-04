@@ -28,5 +28,11 @@ require(["THREE", "Player", "Model", "Point", "Config", "Notify", "Control", "Pl
         document.addEventListener('mousedown', function(event) {
             PlayerHelper.playerFocus = (event.target === _Player.renderer.domElement);
         }, false);
+
+        document.addEventListener('keydown', function(event) {
+            if(192 === event.keyCode && _Player && PlayerHelper.playerFocus){
+                _Player.SetRenderMode();
+            }
+        }, false);
     }
 );

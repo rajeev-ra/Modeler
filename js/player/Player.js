@@ -6,35 +6,6 @@ define(function(){
             _this.parent.onresize = function(){
                 _this.resize();
             };
-            
-            function DrawAxisPlanes(THREE){
-                var matX = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-                var matY = new THREE.LineBasicMaterial( { color: 0x00ff00 } );
-                var matZ = new THREE.LineBasicMaterial( { color: 0x0000ff } );
-                var geomX = new THREE.Geometry();
-                var geomY = new THREE.Geometry();
-                var geomZ = new THREE.Geometry();
-                geomX.vertices.push(new THREE.Vector3( -10, 0, 0) );
-                geomX.vertices.push(new THREE.Vector3( 10, 0, 0) );
-                geomY.vertices.push(new THREE.Vector3( 0, -10, 0) );
-                geomY.vertices.push(new THREE.Vector3( 0, 10, 0) );
-                geomZ.vertices.push(new THREE.Vector3( 0, 0, -10) );
-                geomZ.vertices.push(new THREE.Vector3( 0, 0, 10) );
-                var lineX = new THREE.LineSegments(geomX, matX);
-                var lineY = new THREE.LineSegments(geomY, matY);
-                var lineZ = new THREE.LineSegments(geomZ, matZ);
-
-                var lineX1 = new THREE.LineSegments(geomX, matX);
-                var lineY1 = new THREE.LineSegments(geomY, matY);
-                var lineZ1 = new THREE.LineSegments(geomZ, matZ);
-                _this.scene_mesh.add(lineX);
-                _this.scene_mesh.add(lineY);
-                _this.scene_mesh.add(lineZ);
-                
-                _this.scene_wireframe.add(lineX1);
-                _this.scene_wireframe.add(lineY1);
-                _this.scene_wireframe.add(lineZ1);                
-            }
 
             require(["THREE", "Control", "Notify"], function(THREE, Control, Notify){
                 _this.scene_mesh = new THREE.Scene();
@@ -63,7 +34,30 @@ define(function(){
                 }
                 Notify.Event(Notify.CommonEvents.PlayerReady, null);
                 animate();
-            });
+            });            
+            
+            function DrawAxisPlanes(THREE){
+                var matX = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+                var matY = new THREE.LineBasicMaterial( { color: 0x00ff00 } );
+                var matZ = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+                var geomX = new THREE.Geometry();
+                var geomY = new THREE.Geometry();
+                var geomZ = new THREE.Geometry();
+                
+                geomX.vertices.push(new THREE.Vector3( -10, 0, 0) );
+                geomX.vertices.push(new THREE.Vector3( 10, 0, 0) );
+                geomY.vertices.push(new THREE.Vector3( 0, -10, 0) );
+                geomY.vertices.push(new THREE.Vector3( 0, 10, 0) );
+                geomZ.vertices.push(new THREE.Vector3( 0, 0, -10) );
+                geomZ.vertices.push(new THREE.Vector3( 0, 0, 10) );
+
+                _this.scene_mesh.add(new THREE.LineSegments(geomX, matX));
+                _this.scene_mesh.add(new THREE.LineSegments(geomY, matY));
+                _this.scene_mesh.add(new THREE.LineSegments(geomZ, matZ));                
+                _this.scene_wireframe.add(new THREE.LineSegments(geomX, matX));
+                _this.scene_wireframe.add(new THREE.LineSegments(geomY, matY));
+                _this.scene_wireframe.add(new THREE.LineSegments(geomZ, matZ));                
+            }
         },
 
         resize: function(){

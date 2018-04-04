@@ -1,4 +1,5 @@
-define(function (require) {
+define(["THREE"], function (THREE) {
+
     function Line(){
     }
 

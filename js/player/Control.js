@@ -261,8 +261,8 @@ define(["THREE", "Notify", "PlayerHelper"], function (THREE, Notify, PlayerHelpe
                 n.crossVectors(m, cam_vec);
                 m.normalize();
                 n.normalize();
-                m.multiplyScalar(movementX * 0.005);
-                n.multiplyScalar(movementY * 0.005);
+                m.multiplyScalar(movementX * 0.001 * dist);
+                n.multiplyScalar(movementY * 0.001 * dist);
                 centre.add(m);
                 centre.add(n);
                 updateCamPos();

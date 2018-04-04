@@ -4,7 +4,7 @@ define(["THREE"], function (THREE) {
 
         selectedAxis: 0,
 
-        playerFocus: false,
+        playerFocus: true,
 
         movePlaneNorSet: false,
 

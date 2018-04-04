@@ -1,6 +1,6 @@
 define(["THREE"], function (THREE) {
     
-    var sphereGeom = new THREE.SphereGeometry( 0.1, 15, 15 );
+    var sphereGeom = new THREE.SphereGeometry( 0.02, 15, 15 );
 
     function Point(x, y, z){
         if(undefined !== x && undefined !== y && undefined !== z){
