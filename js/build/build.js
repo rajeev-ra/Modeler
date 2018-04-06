@@ -9,6 +9,7 @@
         Config: "js/config",
         Notify: "js/player/Notify",
         PlayerHelper: "js/player/PlayerHelper",
+        SelectionMgr: "js/player/SelectionMgr",
         THREE: "js/lib/three.min",
     },
     

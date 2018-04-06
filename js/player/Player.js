@@ -7,15 +7,15 @@ define(function(){
                 _this.resize();
             };
 
-            require(["THREE", "Control", "Notify"], function(THREE, Control, Notify){
+            require(["THREE", "Control", "Notify", "Config"], function(THREE, Control, Notify, Config){
                 _this.scene_mesh = new THREE.Scene();
                 _this.scene_wireframe = new THREE.Scene();
                 _this.scene = _this.scene_mesh;
-                _this.camera = new THREE.PerspectiveCamera( window.Config.camera.FOV, window.innerWidth / window.innerHeight, window.Config.camera.near, window.Config.camera.far );
-                _this.renderer = new THREE.WebGLRenderer({clearColor: new THREE.Color(window.Config.player.bgColor), clearAlpha: 1});
+                _this.camera = new THREE.PerspectiveCamera( Config.camera.FOV, window.innerWidth / window.innerHeight, Config.camera.near, Config.camera.far );
+                _this.renderer = new THREE.WebGLRenderer({clearColor: new THREE.Color(Config.player.bgColor), clearAlpha: 1});
                 _this.renderer.setSize( window.innerWidth, window.innerHeight );
                 _this.parent.appendChild( _this.renderer.domElement );
-                _this.renderer.setClearColor(new THREE.Color(window.Config.player.bgColor), 1);
+                _this.renderer.setClearColor(new THREE.Color(Config.player.bgColor), 1);
 
                 DrawAxisPlanes(THREE);
                 var light1 = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );

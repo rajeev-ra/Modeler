@@ -1,31 +1,51 @@
-define(["THREE"], function (THREE) {
+define(["THREE", "Config"], function (THREE, Config) {
     
-    var sphereGeom = new THREE.SphereGeometry( 0.02, 15, 15 );
-
     function Point(x, y, z){
+        this.px = 0.0;
+        this.py = 0.0;
+        this.pz = 0.0;
+
         if(undefined !== x && undefined !== y && undefined !== z){
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            this.x = this.px = x;
+            this.y = this.py = y;
+            this.z = this.pz = z;
         }
         else if( undefined !== x && undefined === y && undefined === z){
-            this.x = x.x;
-            this.y = x.y;
-            this.z = x.z;
+            this.x = this.px = x.x;
+            this.y = this.py = x.y;
+            this.z = this.pz = x.z;
         }
         else if(undefined !== x && undefined !== y && undefined === z){
-            this.x = x;
-            this.y = y;
-            this.z = 0.0;
+            this.x = this.px = x;
+            this.y = this.py = y;
+            this.z = this.pz = 0.0;
         }
         else{
             this.x = this.y = this.z = 0.0;
         }
         this.parentGeom = null;
-        this.mesh = new THREE.Mesh(sphereGeom, window.Config.point.material );
+        this.mesh = new THREE.Mesh(Config.point.geom, Config.point.material );
         this.mesh.position.set(this.x, this.y, this.z);
         this.mesh.geometry.computeFaceNormals();
         this.mesh.pointParent = this;
+
+        this.SetSelect = function(select){
+            if(false === select){
+                this.mesh.material = Config.point.material;
+                this.px = this.x;
+                this.py = this.y;
+                this.pz = this.z;
+            }
+            else{
+                this.mesh.material = Config.point.materialSelected;
+            }
+        };
+
+        this.Move = function(vec){
+            this.X += vec.x;// + this.px;
+            this.Y += vec.y;// + this.py;
+            this.Z += vec.z;// + this.pz;
+        };
 
         Object.defineProperties(this, {
             "X": {

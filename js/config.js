@@ -1,4 +1,4 @@
-define(function (require) {
+define(["THREE"], function (THREE) {
     return {
         player:{
             bgColor: 0xcfd8dc
@@ -12,7 +12,9 @@ define(function (require) {
             far: 10000
         },
         point:{
-            material: null,
+            material: new THREE.MeshLambertMaterial({color: 0x7777ff}),
+            materialSelected: new THREE.MeshLambertMaterial({color: 0xff77dd}),
+            geom: new THREE.SphereGeometry( 0.02, 15, 15 ),
             size: 0.1
         }
     };

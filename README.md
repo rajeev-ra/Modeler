@@ -14,3 +14,5 @@ demo site : https://rawgit.com/rajeev-ra/Modeler/master/index.html
 * While the point is selected, move plane can be switched to yz, xz and xy planes by pressing 'x', 'y' and 'z' buttons in keyboard respectively
 * If 'shift' + 'x' / 'y' / 'z' is pressed, the move plane is switched to move axis parallel to x, y, and z axis respectively
 * A point can be moved in along a move plane / move axis
+* Press 'ctrl' for multiple selection
+
