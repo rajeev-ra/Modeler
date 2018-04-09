@@ -35,7 +35,8 @@ define(function (require) {
         CommonEvents: {
             PlayerReady: "PlayerReady",
             PlayerFail: "PlayerFail",
-            ItemSelected: "ItemSelected"
+            ItemSelected: "ItemSelected",
+            GeometryChanged: "GeometryChanged"
         }
     };
 });

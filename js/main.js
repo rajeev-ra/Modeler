@@ -26,7 +26,7 @@ require(["THREE", "Player", "Model", "Point", "Config", "Notify", "Control", "Pl
         }, false);
 
         document.addEventListener('keydown', function(event) {
-            if(192 === event.keyCode && _Player && PlayerHelper.playerFocus){
+            if(27/*Esc*/ === event.keyCode && _Player && PlayerHelper.playerFocus){
                 _Player.SetRenderMode();
             }
         }, false);

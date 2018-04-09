@@ -8,9 +8,8 @@ define(function(){
             };
 
             require(["THREE", "Control", "Notify", "Config"], function(THREE, Control, Notify, Config){
-                _this.scene_mesh = new THREE.Scene();
+                _this.scene = new THREE.Scene();
                 _this.scene_wireframe = new THREE.Scene();
-                _this.scene = _this.scene_mesh;
                 _this.camera = new THREE.PerspectiveCamera( Config.camera.FOV, window.innerWidth / window.innerHeight, Config.camera.near, Config.camera.far );
                 _this.renderer = new THREE.WebGLRenderer({clearColor: new THREE.Color(Config.player.bgColor), clearAlpha: 1});
                 _this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -18,14 +17,11 @@ define(function(){
                 _this.renderer.setClearColor(new THREE.Color(Config.player.bgColor), 1);
 
                 DrawAxisPlanes(THREE);
-                var light1 = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
-                light1.position.set( 0.5, 1, 0.75 );
-                _this.scene_mesh.add( light1 );
-                var light2 = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
-                light2.position.set( 0.5, 1, 0.75 );
-                _this.scene_wireframe.add( light2 );
+                var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
+                light.position.set( 0.5, 1, 0.75 );
+                _this.scene.add( light );                
 
-                _this.control = new Control(_this.scene_wireframe, _this.camera, _this.renderer.domElement);
+                _this.control = new Control(_this.scene, _this.camera, _this.renderer.domElement);
 
                 function animate() {
                     requestAnimationFrame( animate );
@@ -51,12 +47,9 @@ define(function(){
                 geomZ.vertices.push(new THREE.Vector3( 0, 0, -10) );
                 geomZ.vertices.push(new THREE.Vector3( 0, 0, 10) );
 
-                _this.scene_mesh.add(new THREE.LineSegments(geomX, matX));
-                _this.scene_mesh.add(new THREE.LineSegments(geomY, matY));
-                _this.scene_mesh.add(new THREE.LineSegments(geomZ, matZ));                
-                _this.scene_wireframe.add(new THREE.LineSegments(geomX, matX));
-                _this.scene_wireframe.add(new THREE.LineSegments(geomY, matY));
-                _this.scene_wireframe.add(new THREE.LineSegments(geomZ, matZ));                
+                _this.scene.add(new THREE.LineSegments(geomX, matX));
+                _this.scene.add(new THREE.LineSegments(geomY, matY));
+                _this.scene.add(new THREE.LineSegments(geomZ, matZ));
             }
         },
 
@@ -70,9 +63,11 @@ define(function(){
         },
 
         AddModel: function(model){
-            this.scene_mesh.add(model);
+            this.scene.add(model);
+            this.model = model;
+            
             for(var i = 0; i < model.geometry.vertices.length; i++){
-                this.scene_wireframe.add(model.geometry.vertices[i].mesh);
+                this.scene.add(model.geometry.vertices[i].mesh);
             }
         },
 
@@ -82,21 +77,18 @@ define(function(){
 
         SetRenderMode: function(mode){
             if(undefined === mode || null === mode){
-                mode = (this.scene === this.scene_mesh) ? "wireframe" : "mesh";
+                this.model.SetEditMode(!this.model.IsEditMode);
             }
-            switch(mode){
-                case 'mesh': this.scene = this.scene_mesh; break; 
-                case 'wireframe': this.scene = this.scene_wireframe; break; 
+            else{
+                this.model.SetEditMode(mode);
             }
-            this.control.scene = this.scene;
         },
 
         parent: null,
         scene: null,
-        scene_mesh: null,
-        scene_wireframe: null,
         camera: null,
         renderer: null,
-        control: null
+        control: null,
+        model: null
     }
 });

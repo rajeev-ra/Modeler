@@ -1,24 +1,21 @@
 define(["THREE", "Config"], function (THREE, Config) {
     
     function Point(x, y, z){
-        this.px = 0.0;
-        this.py = 0.0;
-        this.pz = 0.0;
 
         if(undefined !== x && undefined !== y && undefined !== z){
-            this.x = this.px = x;
-            this.y = this.py = y;
-            this.z = this.pz = z;
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
         else if( undefined !== x && undefined === y && undefined === z){
-            this.x = this.px = x.x;
-            this.y = this.py = x.y;
-            this.z = this.pz = x.z;
+            this.x = x.x;
+            this.y = x.y;
+            this.z = x.z;
         }
         else if(undefined !== x && undefined !== y && undefined === z){
-            this.x = this.px = x;
-            this.y = this.py = y;
-            this.z = this.pz = 0.0;
+            this.x = x;
+            this.y = y;
+            this.z = 0.0;
         }
         else{
             this.x = this.y = this.z = 0.0;
@@ -32,9 +29,6 @@ define(["THREE", "Config"], function (THREE, Config) {
         this.SetSelect = function(select){
             if(false === select){
                 this.mesh.material = Config.point.material;
-                this.px = this.x;
-                this.py = this.y;
-                this.pz = this.z;
             }
             else{
                 this.mesh.material = Config.point.materialSelected;
@@ -42,56 +36,25 @@ define(["THREE", "Config"], function (THREE, Config) {
         };
 
         this.Move = function(vec){
-            this.X += vec.x;// + this.px;
-            this.Y += vec.y;// + this.py;
-            this.Z += vec.z;// + this.pz;
+            this.x += vec.x;
+            this.y += vec.y;
+            this.z += vec.z;
+            this.mesh.position.x = this.x;
+            this.mesh.position.y = this.y;
+            this.mesh.position.z = this.z;
+            if(this.parentGeom){
+                this.parentGeom.elementsNeedUpdate = true;
+            }
         };
 
-        Object.defineProperties(this, {
-            "X": {
-                "get": function() {
-                     return this.x;
-                },
-                "set": function(v) {
-                    this.x = v;
-                    this.mesh.position.x = v;
-                    if(this.parentGeom){
-                        this.parentGeom.elementsNeedUpdate = true;
-                    }
-                }
+        this.Visible = function(vis){
+            if(vis){
+                this.mesh.visible = true;
             }
-        });
-
-        Object.defineProperties(this, {
-            "Y": {
-                "get": function() {
-                     return this.y;
-                },
-                "set": function(v) {
-                    this.y = v;
-                    this.mesh.position.y = v;
-                    if(this.parentGeom){
-                        this.parentGeom.elementsNeedUpdate = true;
-                    }
-                }
+            else{
+                this.mesh.visible = false;
             }
-        });
-
-        Object.defineProperties(this, {
-            "Z": {
-                "get": function() {
-                     return this.z;
-                },
-                "set": function(v) {
-                    this.z = v;
-                    this.mesh.position.z = v;
-                    if(this.parentGeom){
-                        this.parentGeom.elementsNeedUpdate = true;
-                    }
-                }
-            }
-        });
-
+        };
     }
 
     Point.prototype = Object.create( THREE.Vector3.prototype );

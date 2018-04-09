@@ -298,6 +298,10 @@ define(["THREE", "Notify", "PlayerHelper", "SelectionMgr"], function (THREE, Not
             }
         }
 
+        function SelectObjects(){
+
+        }
+
         var _this = this;
         document.addEventListener('keydown', onKeyDown, false );
         document.addEventListener('keyup', onKeyUp, false );

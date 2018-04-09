@@ -16,6 +16,10 @@ define(["THREE"], function (THREE) {
             materialSelected: new THREE.MeshLambertMaterial({color: 0xff77dd}),
             geom: new THREE.SphereGeometry( 0.02, 15, 15 ),
             size: 0.1
+        },
+        model:{
+            material: new THREE.MeshPhongMaterial( { color: 0x41d6c3, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1} ),
+            materialEdit: new THREE.MeshPhongMaterial( { color: 0x72f3d3, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1} ),
         }
     };
 });
