@@ -12,7 +12,6 @@ define(["THREE", "Point", "Config"], function (THREE, Point, Config) {
             this.geometry.vertices[i] = new Point(this.geometry.vertices[i]);
             this.geometry.vertices[i].parentGeom = this.geometry;
             this.geometry.vertices[i].Visible(false);
-            //this.add(this.geometry.vertices[i].mesh);
         }
 
         this.add(new THREE.Mesh( this.geometry, new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } ) ));
@@ -21,6 +20,12 @@ define(["THREE", "Point", "Config"], function (THREE, Point, Config) {
             this.IsEditMode = edit;
             for(var i = this.geometry.vertices.length - 1; i >= 0; i--){
                 this.geometry.vertices[i].Visible(edit);
+            }
+            if(edit){
+                this.material = Config.model.materialEdit;
+            }
+            else{
+                this.material = Config.model.material;
             }
         };
 

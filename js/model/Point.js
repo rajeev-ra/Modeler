@@ -47,6 +47,18 @@ define(["THREE", "Config"], function (THREE, Config) {
             }
         };
 
+        this.Set = function(vec){
+            this.x = vec.x;
+            this.y = vec.y;
+            this.z = vec.z;
+            this.mesh.position.x = this.x;
+            this.mesh.position.y = this.y;
+            this.mesh.position.z = this.z;
+            if(this.parentGeom){
+                this.parentGeom.elementsNeedUpdate = true;
+            }
+        };
+
         this.Visible = function(vis){
             if(vis){
                 this.mesh.visible = true;

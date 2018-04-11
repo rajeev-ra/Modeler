@@ -18,7 +18,17 @@ define(["THREE"], function (THREE) {
 
         planeMatInvisible: null,
 
-        showPlane: function(scene, point, normal){
+        showPlane: function(scene, point, normal, axis){
+            if(axis){
+                switch(axis){
+                    case 88: //x
+                        normal = new THREE.Vector3(point.x + 1, point.y, point.z); break;
+                    case 89: //x
+                        normal = new THREE.Vector3(point.x, point.y + 1, point.z); break;
+                    case 90: //x
+                        normal = new THREE.Vector3(point.x, point.y, point.z + 1); break;
+                }
+            }
             if(null === this.movePlane || null === this.planeGrid){
                 this.initPlane();
             }
@@ -37,6 +47,9 @@ define(["THREE"], function (THREE) {
         },
 
         hidePlane: function(scene){
+            if(null === this.movePlane || null === this.planeGrid){
+                return;
+            }
             scene.remove(this.movePlane);
             scene.remove(this.planeGrid);
             scene.remove(this.moveAxis);

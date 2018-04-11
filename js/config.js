@@ -19,7 +19,7 @@ define(["THREE"], function (THREE) {
         },
         model:{
             material: new THREE.MeshPhongMaterial( { color: 0x41d6c3, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1} ),
-            materialEdit: new THREE.MeshPhongMaterial( { color: 0x72f3d3, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1} ),
+            materialEdit: new THREE.MeshPhongMaterial( { color: 0xc5c1aa, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1} ),
         }
     };
 });

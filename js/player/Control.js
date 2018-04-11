@@ -1,4 +1,4 @@
-define(["THREE", "Notify", "PlayerHelper", "SelectionMgr"], function (THREE, Notify, PlayerHelper, SelectionMgr) {
+define(["THREE", "Notify", "PlayerHelper", "SelectionMgr", "UndoMgr"], function (THREE, Notify, PlayerHelper, SelectionMgr, UndoMgr) {
     function Control(scene, camera, domElement) {
 
         var raycaster = new THREE.Raycaster();
@@ -179,6 +179,7 @@ define(["THREE", "Notify", "PlayerHelper", "SelectionMgr"], function (THREE, Not
         function onMouseDown(event) {
             event.preventDefault();
             if(0 === event.button){
+                camera.startDrag(mouse.position);
                 mouse.left = true;
                 var intersects = raycaster.intersectObjects( _this.scene.children );
                 if(intersects.length){
@@ -215,6 +216,7 @@ define(["THREE", "Notify", "PlayerHelper", "SelectionMgr"], function (THREE, Not
                 if(!kb.ctrl){
                     SelectionMgr.clear();
                 }
+                camera.endDrag();
                 PlayerHelper.hidePlane(scene);
             }
             else if(1 === event.button){
@@ -273,25 +275,28 @@ define(["THREE", "Notify", "PlayerHelper", "SelectionMgr"], function (THREE, Not
                 centre.add(n);
                 updateCamPos();
             }
-            else if(mouse.left && 0 < SelectionMgr.count()){
-                var intersects = raycaster.intersectObjects( [PlayerHelper.movePlane] );
-                if(0 < intersects.length){
-                    var vec = new THREE.Vector3(intersects[0].point.x - moveStart.x, intersects[0].point.y - moveStart.y, intersects[0].point.z - moveStart.z);
-                    moveStart = intersects[0].point;
-                    if(PlayerHelper.moveAlongPlane){                        
-                        SelectionMgr.move(vec.x, vec.y, vec.z);
-                    }
-                    else{
-                        switch(PlayerHelper.selectedAxis){
-                            case 88: //x
-                                SelectionMgr.move(vec.x, 0, 0);
-                                break;
-                            case 89: //y
-                                SelectionMgr.move(0, vec.y, 0);
-                                break;
-                            case 90: //z
-                                SelectionMgr.move(0, 0, vec.z);
-                                break;
+            else if(mouse.left){
+                camera.moveDrag(mouse.position);
+                if (0 < SelectionMgr.count()){
+                    var intersects = raycaster.intersectObjects( [PlayerHelper.movePlane] );
+                    if(0 < intersects.length){
+                        var vec = new THREE.Vector3(intersects[0].point.x - moveStart.x, intersects[0].point.y - moveStart.y, intersects[0].point.z - moveStart.z);
+                        moveStart = intersects[0].point;
+                        if(PlayerHelper.moveAlongPlane){                        
+                            SelectionMgr.move(vec.x, vec.y, vec.z);
+                        }
+                        else{
+                            switch(PlayerHelper.selectedAxis){
+                                case 88: //x
+                                    SelectionMgr.move(vec.x, 0, 0);
+                                    break;
+                                case 89: //y
+                                    SelectionMgr.move(0, vec.y, 0);
+                                    break;
+                                case 90: //z
+                                    SelectionMgr.move(0, 0, vec.z);
+                                    break;
+                            }
                         }
                     }
                 }
